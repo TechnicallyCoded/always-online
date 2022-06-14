@@ -14,6 +14,7 @@ import me.johnnywoof.ao.databases.Database;
 import me.johnnywoof.ao.databases.MySQLDatabase;
 import me.johnnywoof.ao.hybrid.AlwaysOnline;
 import me.johnnywoof.ao.velocity.metrics.Metrics;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.slf4j.Logger;
 
@@ -142,7 +143,11 @@ public class VelocityLoader implements NativeExecutor {
 
     @Override
     public void broadcastMessage(String message) {
-        this.server.sendMessage(LegacyComponentSerializer.legacy('&').deserialize(message));
+        TextComponent notifyComponent = LegacyComponentSerializer.legacy('&').deserialize(message);
+
+        this.server.getAllPlayers().stream()
+                .filter(player -> player.hasPermission("alwaysonline.notify"))
+                .forEach(player -> player.sendMessage(notifyComponent));
     }
 
     @Override

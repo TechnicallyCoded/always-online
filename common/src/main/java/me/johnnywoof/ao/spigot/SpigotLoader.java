@@ -160,7 +160,11 @@ public class SpigotLoader extends JavaPlugin implements NativeExecutor{
 	
 	@Override
 	public void broadcastMessage(String message){
-		this.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', message));
+		String coloredMsg = ChatColor.translateAlternateColorCodes('&', message);
+
+		this.getServer().getOnlinePlayers().stream()
+				.filter(player -> player.hasPermission("alwaysonline.notify"))
+				.forEach(player -> player.sendMessage(coloredMsg));
 	}
 	
 	@Override

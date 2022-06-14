@@ -10,6 +10,7 @@ import me.johnnywoof.ao.databases.Database;
 import me.johnnywoof.ao.databases.MySQLDatabase;
 import me.johnnywoof.ao.hybrid.AlwaysOnline;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -82,7 +83,11 @@ public class BungeeLoader extends Plugin implements NativeExecutor{
 	
 	@Override
 	public void broadcastMessage(String message){
-		this.getProxy().broadcast(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
+		BaseComponent[] msgComponents = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message));
+
+		this.getProxy().getPlayers().stream()
+				.filter(player -> player.hasPermission("alwaysonline.notify"))
+				.forEach(player -> player.sendMessage(msgComponents));
 	}
 	
 	@Override
