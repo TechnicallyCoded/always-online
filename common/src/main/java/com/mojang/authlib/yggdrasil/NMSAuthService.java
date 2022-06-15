@@ -9,6 +9,7 @@ import java.net.InetAddress;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import com.mojang.authlib.Environment;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.exceptions.AuthenticationUnavailableException;
 
@@ -24,8 +25,8 @@ public class NMSAuthService extends YggdrasilMinecraftSessionService{
 	private final Method fillGameProfile;
 	private final Method fillProfileProperties;
 
-	public NMSAuthService(Object oldSessionService, YggdrasilAuthenticationService authenticationService, Database database){
-		super(authenticationService);
+	public NMSAuthService(Object oldSessionService, YggdrasilAuthenticationService authenticationService, Environment env, Database database){
+		super(authenticationService, env);
 		this.oldSessionService = (YggdrasilMinecraftSessionService) oldSessionService;
 		this.database = database;
 		this.fillGameProfile = NMSUtils.getMethod(oldSessionService.getClass(), "fillGameProfile", GameProfile.class, boolean.class);
